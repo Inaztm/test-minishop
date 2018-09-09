@@ -1,0 +1,47 @@
+version: "2"
+services:
+    www:
+        build: .
+        ports:
+            - 8000:80
+        environment:
+            DB_CONNECTION: mysql
+            DB_HOST: db
+            DB_USERNAME: root
+            DB_DATABASE: mybase
+            DB_PASSWORD: root
+            APP_URL: 'http://localhost:8000'
+        volumes:
+            - ./www:/var/www
+        depends_on:
+            - db
+        networks:
+            - default
+
+    db:
+        image: mysql:5.7
+        ports:
+            - "3306:3306"
+        environment:
+            MYSQL_DATABASE: mybase
+            MYSQL_ROOT_PASSWORD: root
+        # volumes:
+            # - ./database/SQL:/docker-entrypoint-initdb.d
+            # - persistent:/var/lib/mysql
+        networks:
+            - default
+
+    # phpmyadmin:
+    #     image: phpmyadmin/phpmyadmin
+    #     links:
+    #         - db:db
+    #     ports:
+    #         - 8000:80
+    #     restart: always
+    #     environment:
+    #         MYSQL_USER: root
+    #         MYSQL_PASSWORD: root
+    #         MYSQL_ROOT_PASSWORD: root
+
+# volumes:
+#     persistent:
