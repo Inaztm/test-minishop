@@ -1,6 +1,6 @@
 const Welcome = () => import('~/pages/welcome')
 const Login = () => import('~/pages/auth/login')
-const LoginToken = () => import('~/pages/auth/loginTokrn')
+const LoginToken = () => import('~/pages/auth/loginToken')
 const Register = () => import('~/pages/auth/register')
 const PasswordEmail = () => import('~/pages/auth/password/email')
 const PasswordReset = () => import('~/pages/auth/password/reset')

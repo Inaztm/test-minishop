@@ -2,6 +2,8 @@
   <div class="row">
     <div class="col-lg-8 m-auto">
       <card :title="$t('register')">
+        <h2 v-if="isSend">Войдите по ссылке отправленной на почту</h2>
+
         <form @submit.prevent="register" @keydown="form.onKeydown($event)">
           <!-- Name -->
           <div class="form-group row">
@@ -58,28 +60,22 @@ export default {
   data: () => ({
     form: new Form({
       name: '',
-      email: '',
-      password: '',
-      password_confirmation: ''
-    })
+      email: ''
+    }),
+    isSend: false
   }),
 
   methods: {
     async register () {
       // Register the user.
-      const { data } = await this.form.post('/api/register')
+      await this.form.post('/api/register')
 
       // Log in the user.
-      const { data: { token }} = await this.form.post('/api/login')
+      const { data } = await this.form.post('/api/login')
 
-      // Save the token.
-      this.$store.dispatch('auth/saveToken', { token })
-
-      // Update the user.
-      await this.$store.dispatch('auth/updateUser', { user: data })
-
-      // Redirect home.
-      this.$router.push({ name: 'welcome' })
+      if (!data.error) {
+        this.isSend = true
+      }
     }
   }
 }

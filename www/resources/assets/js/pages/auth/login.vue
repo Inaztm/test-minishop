@@ -2,7 +2,7 @@
   <div class="row">
     <div class="col-lg-8 m-auto">
       <card :title="$t('login')">
-        <h2 v-if="isSend">Войдите по ссылке отправленой на почту</h2>
+        <h2 v-if="isSend">Войдите по ссылке отправленной на почту</h2>
 
         <form @submit.prevent="login" @keydown="form.onKeydown($event)">
           <!-- Email -->
@@ -12,20 +12,6 @@
               <input v-model="form.email" type="email" name="email" class="form-control"
                 :class="{ 'is-invalid': form.errors.has('email') }">
               <has-error :form="form" field="email"/>
-            </div>
-          </div>
-
-          <!-- Remember Me -->
-          <div class="form-group row">
-            <div class="col-md-3"></div>
-            <div class="col-md-7 d-flex">
-              <checkbox v-model="remember" name="remember">
-                {{ $t('remember_me') }}
-              </checkbox>
-
-              <router-link :to="{ name: 'password.request' }" class="small ml-auto my-auto">
-                {{ $t('forgot_password') }}
-              </router-link>
             </div>
           </div>
 
