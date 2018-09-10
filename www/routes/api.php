@@ -33,6 +33,7 @@ $router->group(['middleware' => 'laravel.jwt'], function () use ($router) {
 $router->group([], function () use ($router) {
     $router->post('register', ['uses' => 'Auth\RegisterController@store']);
     $router->post('login', ['uses' => 'Auth\LoginController@login']);
+    $router->post('login/{token}', ['uses' => 'Auth\LoginController@loginToken']);
 
     $router->group(['prefix' => 'products'], function () use ($router) {
         $router->get('', ['uses' => 'Admin\ProductsController@all']);

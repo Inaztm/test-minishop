@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 use App\Http\Requests\Auth\LoginRequest;
+use App\User;
 
 class LoginController extends Controller
 {
@@ -22,14 +23,36 @@ class LoginController extends Controller
 
     public function login(LoginRequest $request)
     {
-        if ($token = Auth::attempt($request->only(['email', 'password']))) {
+        $user = User::where('email', $request->input('email'))->first();
+        
+        if ($user) {
+            $url = url('/login/'. $user->token);
+
+            Mail::send('auth.emails.email-login', ['url' => $url], function ($m) use ($request) {
+                $m->from('noreply@myapp.com', 'MyApp');
+                $m->to($request->input('email'))->subject('MyApp Login');
+            });
+
+            return response()->json([
+                'error' => false
+            ]);
+        }
+
+        return response()->json([
+            'error' => true
+        ]);
+    }
+
+    public function loginToken($token)
+    {
+        if ($token = Auth::attempt(['token' => $token])) {
             return response()->json([
                 'token' => $token
             ]);
         }
 
-        throw ValidationException::withMessages([
-            'email' => [trans('auth.failed')],
+        return response()->json([
+            'token' => null
         ]);
     }
 

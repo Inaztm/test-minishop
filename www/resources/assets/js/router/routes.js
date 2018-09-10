@@ -1,5 +1,6 @@
 const Welcome = () => import('~/pages/welcome')
 const Login = () => import('~/pages/auth/login')
+const LoginToken = () => import('~/pages/auth/loginTokrn')
 const Register = () => import('~/pages/auth/register')
 const PasswordEmail = () => import('~/pages/auth/password/email')
 const PasswordReset = () => import('~/pages/auth/password/reset')
@@ -16,6 +17,7 @@ export default [
   { path: '/', name: 'welcome', component: Welcome },
 
   { path: '/login', name: 'login', component: Login },
+  { path: '/login/:token', name: 'login.token', component: LoginToken },
   { path: '/register', name: 'register', component: Register },
   { path: '/password/reset', name: 'password.request', component: PasswordEmail },
   { path: '/password/reset/:token', name: 'password.reset', component: PasswordReset },

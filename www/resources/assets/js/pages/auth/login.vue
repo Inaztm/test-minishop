@@ -2,6 +2,8 @@
   <div class="row">
     <div class="col-lg-8 m-auto">
       <card :title="$t('login')">
+        <h2 v-if="isSend">Войдите по ссылке отправленой на почту</h2>
+
         <form @submit.prevent="login" @keydown="form.onKeydown($event)">
           <!-- Email -->
           <div class="form-group row">
@@ -10,16 +12,6 @@
               <input v-model="form.email" type="email" name="email" class="form-control"
                 :class="{ 'is-invalid': form.errors.has('email') }">
               <has-error :form="form" field="email"/>
-            </div>
-          </div>
-
-          <!-- Password -->
-          <div class="form-group row">
-            <label class="col-md-3 col-form-label text-md-right">{{ $t('password') }}</label>
-            <div class="col-md-7">
-              <input v-model="form.password" type="password" name="password" class="form-control"
-                :class="{ 'is-invalid': form.errors.has('password') }">
-              <has-error :form="form" field="password"/>
             </div>
           </div>
 
@@ -71,10 +63,9 @@ export default {
 
   data: () => ({
     form: new Form({
-      email: '',
-      password: ''
+      email: ''
     }),
-    remember: false
+    isSend: false
   }),
 
   methods: {
@@ -82,17 +73,9 @@ export default {
       // Submit the form.
       const { data } = await this.form.post('/api/login')
 
-      // Save the token.
-      this.$store.dispatch('auth/saveToken', {
-        token: data.token,
-        remember: this.remember
-      })
-
-      // Fetch the user.
-      await this.$store.dispatch('auth/fetchUser')
-
-      // Redirect home.
-      this.$router.push({ name: 'welcome' })
+      if (!data.error) {
+        this.isSend = true
+      }
     }
   }
 }
